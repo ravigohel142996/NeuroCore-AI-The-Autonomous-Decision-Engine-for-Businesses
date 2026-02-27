@@ -13,21 +13,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.generate_data import generate_cost_data
 from models.anomaly_detection import detect_cost_anomalies
 from utils.visualization import anomaly_chart
+from utils.theme import inject_css, section_header
 
 st.set_page_config(page_title="Anomaly Detection · NeuroCore AI", page_icon="⚠️", layout="wide")
-
-st.markdown(
-    """
-    <style>
-    .stApp { background-color: #0e1117; color: #e0e0e0; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+inject_css()
 
 st.markdown("# ⚠️ Cost Anomaly Detection")
-st.markdown("Isolation Forest model to identify unusual cost spikes in operational data.")
+st.markdown(
+    '<p style="color:#C9D1D9;">Isolation Forest model to identify unusual cost spikes in operational data.</p>',
+    unsafe_allow_html=True,
+)
 st.divider()
 
 with st.sidebar:
@@ -64,6 +59,7 @@ if result_df is not None:
     normal_count = (~result_df["is_anomaly"]).sum()
 
     # ── KPIs ─────────────────────────────────────────────────────────────────────
+    section_header("Detection Summary")
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Records", f"{len(result_df):,}")
     col2.metric("Anomalies Detected", f"{anomaly_count}")
@@ -72,11 +68,12 @@ if result_df is not None:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ── Chart ────────────────────────────────────────────────────────────────────
+    section_header("Cost Anomaly Timeline")
     fig = anomaly_chart(result_df)
     st.plotly_chart(fig, use_container_width=True)
 
     # ── Anomaly table ─────────────────────────────────────────────────────────────
-    st.markdown("### 🚨 Flagged Anomalies")
+    section_header("Flagged Anomalies")
     anomalies = result_df[result_df["is_anomaly"]].copy()
     anomalies["date"] = anomalies["date"].astype(str)
     for col in ["operational_cost", "marketing_cost", "hr_cost", "total_cost"]:

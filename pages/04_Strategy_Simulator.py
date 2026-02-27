@@ -11,26 +11,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from utils.strategy_simulator import simulate_strategy
 from utils.visualization import risk_gauge
+from utils.theme import inject_css, section_header
 
 st.set_page_config(page_title="Strategy Simulator · NeuroCore AI", page_icon="🧩", layout="wide")
-
-st.markdown(
-    """
-    <style>
-    .stApp { background-color: #0e1117; color: #e0e0e0; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    .result-card {
-        background: linear-gradient(135deg, #1f2937, #111827);
-        border: 1px solid #374151; border-radius: 12px;
-        padding: 16px 20px; margin-bottom: 8px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+inject_css()
 
 st.markdown("# 🧩 Strategy Simulator")
-st.markdown("Model the financial impact of key business decisions before committing resources.")
+st.markdown(
+    '<p style="color:#C9D1D9;">Model the financial impact of key business decisions before committing resources.</p>',
+    unsafe_allow_html=True,
+)
 st.divider()
 
 # ── Inputs ────────────────────────────────────────────────────────────────────────
@@ -64,7 +54,7 @@ result = st.session_state.get("sim_result", {})
 
 if result:
     # ── Financial summary ─────────────────────────────────────────────────────────
-    st.markdown("### 💹 Projected Financials")
+    section_header("Projected Financials")
     col1, col2, col3 = st.columns(3)
 
     rev_delta = result["revenue_delta"]
@@ -95,7 +85,7 @@ if result:
     col_roi, col_gauge = st.columns([1, 1])
 
     with col_roi:
-        st.markdown("### 📊 ROI Analysis")
+        section_header("ROI Analysis")
         st.markdown(
             f"""
             | Metric | Value |
@@ -108,12 +98,12 @@ if result:
         )
 
     with col_gauge:
-        st.markdown("### ⚡ Business Risk Score")
+        section_header("Business Risk Score")
         fig_risk = risk_gauge(result["risk_score"])
         st.plotly_chart(fig_risk, use_container_width=True)
 
     # ── Interpretation ────────────────────────────────────────────────────────────
-    st.markdown("### 🤖 Simulation Interpretation")
+    section_header("Simulation Interpretation")
     if result["roi_percent"] > 20:
         st.success(
             f"✅ Strong ROI of **{result['roi_percent']:.1f}%**. "

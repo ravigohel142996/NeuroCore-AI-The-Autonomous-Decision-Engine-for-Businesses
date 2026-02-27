@@ -13,26 +13,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.generate_data import generate_revenue_data
 from models.revenue_forecast import run_revenue_forecast
 from utils.visualization import revenue_forecast_chart
+from utils.theme import inject_css, section_header
 
 st.set_page_config(page_title="Revenue Forecast · NeuroCore AI", page_icon="📈", layout="wide")
-
-st.markdown(
-    """
-    <style>
-    .stApp { background-color: #0e1117; color: #e0e0e0; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    .metric-box {
-        background: linear-gradient(135deg, #1f2937, #111827);
-        border: 1px solid #374151; border-radius: 10px;
-        padding: 16px 20px; text-align: center;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+inject_css()
 
 st.markdown("# 📈 Revenue Forecast")
-st.markdown("Prophet-based 6-month revenue projection with confidence intervals.")
+st.markdown(
+    '<p style="color:#C9D1D9;">Prophet-based 6-month revenue projection with confidence intervals.</p>',
+    unsafe_allow_html=True,
+)
 st.divider()
 
 # ── Controls ────────────────────────────────────────────────────────────────────
@@ -65,6 +55,7 @@ forecast_df, metrics = st.session_state.get("forecast_result", (None, None))
 
 if forecast_df is not None:
     # ── Metrics ─────────────────────────────────────────────────────────────────
+    section_header("Forecast Metrics")
     col1, col2, col3 = st.columns(3)
     col1.metric("Last Actual Revenue", f"${metrics['last_actual_revenue']:,.0f}")
     col2.metric("Next Month Forecast", f"${metrics['next_month_forecast']:,.0f}")
@@ -73,11 +64,12 @@ if forecast_df is not None:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ── Chart ────────────────────────────────────────────────────────────────────
+    section_header("Revenue Forecast Chart")
     fig = revenue_forecast_chart(df, forecast_df, title="Revenue Forecast (6-Month Projection)")
     st.plotly_chart(fig, use_container_width=True)
 
     # ── Forecast table ────────────────────────────────────────────────────────────
-    st.markdown("### 📋 Forecast Detail")
+    section_header("Forecast Detail")
     future = forecast_df[forecast_df["ds"] > df["ds"].max()][
         ["ds", "yhat", "yhat_lower", "yhat_upper"]
     ].copy()
