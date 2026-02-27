@@ -199,28 +199,35 @@ def risk_gauge(risk_score: float, title: str = "Business Risk Score") -> go.Figu
     """
     fig = go.Figure(
         go.Indicator(
-            mode="gauge+number+delta",
+            mode="gauge+number",
             value=risk_score,
-            title={"text": title, "font": {"color": COLORS["text"], "size": 14}},
-            number={"font": {"color": COLORS["text"], "size": 36}},
+            title={"text": title, "font": {"color": COLORS["text"], "size": 15}},
+            number={
+                "font": {"color": COLORS["text"], "size": 40, "family": "Inter, Segoe UI, sans-serif"},
+                "suffix": "/100",
+                "valueformat": ".0f",
+            },
             gauge={
                 "axis": {
                     "range": [0, 100],
-                    "tickcolor": COLORS["text_muted"],
-                    "tickfont": {"color": COLORS["text_muted"], "size": 11},
+                    "tickvals": [0, 20, 40, 65, 100],
+                    "ticktext": ["0", "20", "40", "65", "100"],
+                    "tickcolor": COLORS["text_sec"],
+                    "tickfont": {"color": COLORS["text_sec"], "size": 12},
                 },
-                "bar": {"color": _risk_color(risk_score)},
+                "bar": {"color": _risk_color(risk_score), "thickness": 0.7},
                 "bgcolor": COLORS["card_bg"],
+                "borderwidth": 1,
                 "bordercolor": COLORS["border"],
                 "steps": [
-                    {"range": [0, 20],  "color": "#0B2B1E"},
-                    {"range": [20, 40], "color": "#1A2E0A"},
-                    {"range": [40, 65], "color": "#2B1A08"},
-                    {"range": [65, 100],"color": "#2B0808"},
+                    {"range": [0, 20],  "color": "#0D2B1F"},
+                    {"range": [20, 40], "color": "#1A2A0A"},
+                    {"range": [40, 65], "color": "#2B1F08"},
+                    {"range": [65, 100],"color": "#2B0A0A"},
                 ],
                 "threshold": {
                     "line": {"color": COLORS["text"], "width": 3},
-                    "thickness": 0.75,
+                    "thickness": 0.8,
                     "value": risk_score,
                 },
             },
@@ -228,8 +235,12 @@ def risk_gauge(risk_score: float, title: str = "Business Risk Score") -> go.Figu
     )
     fig.update_layout(
         paper_bgcolor=COLORS["bg"],
-        font=dict(color=COLORS["text_sec"]),
-        margin=dict(l=20, r=20, t=60, b=20),
+        font=dict(
+            color=COLORS["text_sec"],
+            family="Inter, Segoe UI, sans-serif",
+        ),
+        margin=dict(l=24, r=24, t=64, b=24),
+        height=280,
     )
     return fig
 
