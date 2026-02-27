@@ -27,6 +27,9 @@ COLORS = {
 
 _CSS = """
 <style>
+/* ── Google Fonts – Inter ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* ── Global reset ── */
 html, body, [class*="css"]  { font-family: 'Inter', 'Segoe UI', sans-serif; }
 .stApp                       { background-color: #0B0F1A; color: #C9D1D9; }
@@ -43,35 +46,63 @@ section[data-testid="stSidebar"] h3 { color: #FFFFFF !important; }
 section[data-testid="stSidebar"] .stCaption { color: #9CA3AF !important; }
 section[data-testid="stSidebar"] a:hover { color: #00D4FF !important; }
 
-/* ── Headings ── */
-h1 { color: #FFFFFF !important; font-weight: 700; letter-spacing: -0.5px; }
-h2 { color: #FFFFFF !important; font-weight: 600; }
-h3 { color: #C9D1D9 !important; font-weight: 600; }
+/* ── Typography scale ── */
+h1 {
+    color: #FFFFFF !important;
+    font-size: 2.25rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+}
+h2 {
+    color: #FFFFFF !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+h3 {
+    color: #C9D1D9 !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0;
+}
+p, li, span, label { font-size: 0.95rem; line-height: 1.6; }
 
 /* ── Divider ── */
-hr { border-color: #1E2A3B !important; }
+hr { border-color: #1E2A3B !important; margin: 1.75rem 0 !important; }
 
 /* ── st.metric cards ── */
 [data-testid="metric-container"] {
     background: #141A28;
     border: 1px solid #1E2A3B;
     border-radius: 12px;
-    padding: 16px 20px;
+    padding: 20px 24px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+[data-testid="metric-container"]:hover {
+    border-color: rgba(0,212,255,0.5);
+    box-shadow: 0 0 18px rgba(0,212,255,0.12), 0 4px 16px rgba(0,0,0,0.4);
 }
 [data-testid="metric-container"] label {
     color: #9CA3AF !important;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
 }
 [data-testid="metric-container"] [data-testid="stMetricValue"] {
     color: #FFFFFF !important;
-    font-size: 1.9rem !important;
+    font-size: 1.85rem !important;
     font-weight: 700 !important;
+    letter-spacing: -0.5px;
 }
 [data-testid="metric-container"] [data-testid="stMetricDelta"] {
-    font-size: 0.88rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
 }
 
 /* ── Buttons ── */
@@ -81,13 +112,21 @@ hr { border-color: #1E2A3B !important; }
     border: none;
     border-radius: 8px;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    padding: 0.55rem 1.4rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     box-shadow: 0 2px 8px rgba(0,212,255,0.25);
+    cursor: pointer;
 }
 .stButton > button:hover {
-    opacity: 0.88;
-    box-shadow: 0 4px 16px rgba(0,212,255,0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,212,255,0.5);
+    background: linear-gradient(135deg, #00AACF, #33DDFF);
+}
+.stButton > button:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0,212,255,0.3);
 }
 
 /* ── Dataframe / table ── */
@@ -102,48 +141,73 @@ hr { border-color: #1E2A3B !important; }
 
 /* ── Custom components ── */
 .nc-section-header {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #00D4FF;
     border-left: 4px solid #00D4FF;
     padding-left: 12px;
-    margin: 22px 0 12px;
-    letter-spacing: 0.03em;
+    margin: 32px 0 16px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 .nc-kpi-card {
     background: #141A28;
     border: 1px solid #1E2A3B;
     border-radius: 14px;
-    padding: 22px 26px;
+    padding: 26px 28px 22px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-    transition: border-color 0.2s;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 }
-.nc-kpi-card:hover { border-color: #00D4FF; }
+.nc-kpi-card:hover {
+    border-color: rgba(0,212,255,0.6);
+    box-shadow: 0 0 22px rgba(0,212,255,0.15), 0 6px 24px rgba(0,0,0,0.5);
+    transform: translateY(-2px);
+}
 .nc-kpi-title {
-    font-size: 0.76rem;
+    font-size: 0.78rem;
+    font-weight: 600;
     color: #9CA3AF;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 }
 .nc-kpi-value {
-    font-size: 2.1rem;
+    font-size: 2.15rem;
     font-weight: 800;
     color: #FFFFFF;
     line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
 }
-.nc-kpi-delta-pos { color: #00F5A0; font-size: 0.88rem; margin-top: 4px; }
-.nc-kpi-delta-neg { color: #FF4B4B; font-size: 0.88rem; margin-top: 4px; }
-.nc-kpi-delta-neu { color: #9CA3AF; font-size: 0.88rem; margin-top: 4px; }
+.nc-kpi-delta-pos {
+    color: #00F5A0;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+}
+.nc-kpi-delta-neg {
+    color: #FF4B4B;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+}
+.nc-kpi-delta-neu {
+    color: #9CA3AF;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+}
 
 .nc-result-card {
     background: #141A28;
     border: 1px solid #1E2A3B;
     border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 10px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 </style>
