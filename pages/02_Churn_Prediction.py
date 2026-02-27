@@ -13,21 +13,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from data.generate_data import generate_churn_data
 from models.churn_prediction import train_churn_model
 from utils.visualization import confusion_matrix_chart, feature_importance_chart
+from utils.theme import inject_css, section_header
 
 st.set_page_config(page_title="Churn Prediction · NeuroCore AI", page_icon="🔁", layout="wide")
-
-st.markdown(
-    """
-    <style>
-    .stApp { background-color: #0e1117; color: #e0e0e0; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+inject_css()
 
 st.markdown("# 🔁 Customer Churn Prediction")
-st.markdown("Random Forest classifier trained on synthetic customer data.")
+st.markdown(
+    '<p style="color:#C9D1D9;">Random Forest classifier trained on synthetic customer data.</p>',
+    unsafe_allow_html=True,
+)
 st.divider()
 
 with st.sidebar:
@@ -58,6 +53,7 @@ df = st.session_state.get("churn_data")
 
 if metrics:
     # ── Metrics ─────────────────────────────────────────────────────────────────
+    section_header("Model Performance Metrics")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("ROC-AUC", f"{metrics['roc_auc']:.4f}")
     col2.metric("Precision", f"{metrics['precision']:.4f}")
@@ -77,5 +73,5 @@ if metrics:
         st.plotly_chart(fig_fi, use_container_width=True)
 
     # ── Dataset preview ──────────────────────────────────────────────────────────
-    st.markdown("### 📋 Dataset Sample")
+    section_header("Dataset Sample")
     st.dataframe(df.head(20), use_container_width=True)

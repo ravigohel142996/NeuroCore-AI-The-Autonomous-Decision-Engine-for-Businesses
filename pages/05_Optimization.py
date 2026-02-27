@@ -12,23 +12,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from utils.optimization import optimize_profit
 from utils.visualization import risk_gauge
+from utils.theme import inject_css, section_header, COLORS, plotly_layout
 
 st.set_page_config(page_title="Profit Optimization · NeuroCore AI", page_icon="💰", layout="wide")
-
-st.markdown(
-    """
-    <style>
-    .stApp { background-color: #0e1117; color: #e0e0e0; }
-    section[data-testid="stSidebar"] { background-color: #161b22; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+inject_css()
 
 st.markdown("# 💰 Profit Optimization")
 st.markdown(
-    "SciPy SLSQP optimizer finds the optimal marketing spend, pricing, and hiring mix "
-    "to maximize profit within your budget and risk constraints."
+    '<p style="color:#C9D1D9;">SciPy SLSQP optimizer finds the optimal marketing spend, pricing, and hiring mix '
+    "to maximize profit within your budget and risk constraints.</p>",
+    unsafe_allow_html=True,
 )
 st.divider()
 
@@ -63,7 +56,7 @@ if result:
     status_icon = "✅" if result["optimizer_success"] else "⚠️"
     st.markdown(f"**Optimizer Status:** {status_icon} {result['optimizer_message']}")
 
-    st.markdown("### 🎯 Optimal Decision Variables")
+    section_header("Optimal Decision Variables")
     col1, col2, col3 = st.columns(3)
     col1.metric("Marketing Increase", f"{result['optimized_marketing_increase_pct']:.1f}%")
     col2.metric("Price Change", f"{result['optimized_price_change_pct']:.1f}%")
@@ -71,7 +64,7 @@ if result:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    st.markdown("### 💹 Projected Outcome")
+    section_header("Projected Outcome")
     col4, col5, col6 = st.columns(3)
     col4.metric("Projected Revenue", f"${result['projected_revenue']:,.0f}")
     col5.metric("Projected Cost", f"${result['projected_cost']:,.0f}")
@@ -82,30 +75,32 @@ if result:
     col_gauge, col_bar = st.columns([1, 2])
 
     with col_gauge:
-        st.markdown("### ⚡ Optimized Risk Score")
+        section_header("Optimized Risk Score")
         fig_risk = risk_gauge(result["risk_score"])
         st.plotly_chart(fig_risk, use_container_width=True)
 
     with col_bar:
-        st.markdown("### 📊 Base vs Optimized Profit")
+        section_header("Base vs Optimized Profit")
         base_profit = base_revenue - base_cost
         fig_compare = go.Figure(
             go.Bar(
                 x=["Base Profit", "Optimized Profit"],
                 y=[base_profit, result["projected_profit"]],
-                marker=dict(color=["#374151", "#7c3aed"]),
+                marker=dict(
+                    color=[COLORS["border"], COLORS["accent"]],
+                    opacity=0.9,
+                ),
                 text=[f"${base_profit:,.0f}", f"${result['projected_profit']:,.0f}"],
                 textposition="outside",
+                textfont=dict(color=COLORS["text_sec"]),
             )
         )
         fig_compare.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="#0e1117",
-            plot_bgcolor="#0e1117",
-            font=dict(color="#e0e0e0"),
-            yaxis_title="Profit (USD)",
-            height=300,
-            margin=dict(l=40, r=20, t=20, b=40),
+            **plotly_layout(
+                yaxis_title="Profit (USD)",
+                height=300,
+                margin=dict(l=48, r=28, t=28, b=48),
+            )
         )
         st.plotly_chart(fig_compare, use_container_width=True)
 
